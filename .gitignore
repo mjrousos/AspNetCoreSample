@@ -236,3 +236,7 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+# Minified css and js
+*.min.css
+*.min.js
