@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "TaskList", "TaskList\TaskList.xproj", "{61E024F0-FF36-4C6B-83EC-B2A027A5AA36}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "TaskTracker", "TaskTracker\TaskTracker.xproj", "{61E024F0-FF36-4C6B-83EC-B2A027A5AA36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
