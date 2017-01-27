@@ -26,7 +26,11 @@
     "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0",
     "Microsoft.EntityFrameworkCore.Design": "1.1.0",
 
-    "Swashbuckle.AspNetCore": "1.0.0-rc1"
+    "Swashbuckle.AspNetCore": "1.0.0-rc1",
+
+    "Serilog.Extensions.Logging": "1.4.0-dev-10138",
+    "Serilog.Settings.Configuration": "2.3.0-dev-00042",
+    "Serilog.Sinks.Literate": "2.1.0-dev-00034"
   },
 
   "tools": {

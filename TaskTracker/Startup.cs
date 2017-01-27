@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using TaskList.Models;
 using Swashbuckle.AspNetCore.Swagger;
+using Serilog;
 
 namespace TaskList
 {
@@ -32,6 +33,13 @@ namespace TaskList
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Configure Serilog sinks based on configuration, as explained in
+            // https://github.com/serilog/serilog-sinks-literate#json-appsettingsjson-configuration
+            // https://github.com/serilog/serilog-settings-configuration
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(Configuration)
+                .CreateLogger();
+
             // Decide which database to use based on configuration
             var databaseConfig = Configuration.GetSection("DatabaseConnection");
             switch (databaseConfig["Provider"]?.ToLowerInvariant())
@@ -60,10 +68,19 @@ namespace TaskList
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            if (env.IsDevelopment())
+            {
+                loggerFactory.AddDebug();
+            }
+
+            // Start Serilog - a popular third-party structured logging framework
+            // Many Serilog sinks are available. https://github.com/serilog
+            loggerFactory.AddSerilog();
+            // Make sure that any bufferred messages are sent at shutdown
+            appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
+
 
             // Seed database
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
