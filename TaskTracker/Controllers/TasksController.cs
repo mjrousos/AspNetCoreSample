@@ -38,6 +38,7 @@ namespace TaskList.Controllers
             // Note that we need explicitly load related entities.
             // EF.Core does not support lazy loading like EF6 did.
             // https://docs.microsoft.com/en-us/ef/core/querying/related-data
+            // Here, we use eager loading. See the Details method for an example of explicit loading
             //
             // No tracking since we won't be modifying these entities
             // http://stackoverflow.com/questions/12211680/what-difference-does-asnotracking-make
@@ -51,6 +52,33 @@ namespace TaskList.Controllers
             var ret = (await tasks.ToArrayAsync(ct)).Select(CreateTaskDTO);
 
             return Json(ret.ToArray());
+        }
+
+        // GET: api/Tasks/{id}
+        [ResponseCache(NoStore = true)]
+        [HttpGet("{id}", Name = "TaskDetails")] // The name for this route means we can reference it elsewhere (like from Create, below)
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var task = await DbContext.Tasks.FindAsync(id);
+
+            if (task != null)
+            {
+                // Explicitly query all joined categories and load them
+                await DbContext.Entry(task)
+                    .Collection(t => t.CategoryJoins)
+                    .Query()
+                    .Include(x => x.Category)
+                    // .AsNoTracking()  // Note that we can NOT use AsNoTracking in explicit loading scenarios
+                                        // (since EF has to fix-up the objects which are read-only in
+                                        // AsNoTracking scenarios
+                    .LoadAsync();
+
+                return Json(CreateTaskDTO(task));
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         [HttpPost]
@@ -81,7 +109,7 @@ namespace TaskList.Controllers
                 }
             }
             await DbContext.SaveChangesAsync(ct);
-            return CreatedAtAction("", newTask.Id);
+            return Created(Url.RouteUrl("TaskDetails", new { id = newTask.Id }), CreateTaskDTO(newTask));
         }
 
         // TODO - Do this with Automapper eventually.
