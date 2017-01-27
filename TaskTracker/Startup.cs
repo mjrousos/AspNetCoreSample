@@ -80,7 +80,25 @@ namespace TaskList
             loggerFactory.AddSerilog();
             // Make sure that any bufferred messages are sent at shutdown
             appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
+            var log = loggerFactory.CreateLogger<Startup>();
 
+            // Very simple custom middleware to log unhandled exceptions
+            // More complex middleware would, of course, be enacpsulated in its own class
+            // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware
+            app.Use(async (context, next)=>
+            {
+                try
+                {
+                    await next();
+                }
+                catch(Exception exc)
+                {
+                    // Context.Response could be modifier here, if desired (set status code, for example)
+                    // TODO - EventId's should be created unique to different event types the application may log
+                    log.LogError(new EventId(1), exc, "Unhandled exception caught");
+                    throw;
+                }
+            });
 
             // Seed database
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
@@ -91,10 +109,12 @@ namespace TaskList
                 // Non-relational databases (like InMemory) cannot have migrations applied to them
                 if (databaseConfig["Provider"]?.ToLowerInvariant() == "inmemory")
                 {
+                    log.LogDebug("Ensuring database created");
                     dbContext.Database.EnsureCreated();
                 }
                 else
                 {
+                    log.LogDebug("Ensuring database migrated");
                     dbContext.Database.Migrate();
                 }
                 dbContext.Seed();

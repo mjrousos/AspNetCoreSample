@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,12 +13,14 @@ namespace TaskList
         {
             if (!dbContext.TaskCategories.Any())
             {
+                Log.Information("Seeding task categories");
                 dbContext.TaskCategories.Add(new TaskCategory { Title = "Chores" });
                 dbContext.SaveChanges();
             }
 
             if (!dbContext.Tasks.Any())
             {
+                Log.Information("Seeding tasks");
                 var newTask = new TaskItem { Title = "Dishes" };
                 dbContext.Tasks.Add(newTask);
 
