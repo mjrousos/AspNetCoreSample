@@ -5,8 +5,9 @@ namespace TaskList.Models
 {
     public class TasksContext: DbContext
     {
-        public DbSet<TaskItem> Tasks;
-        public DbSet<TaskCategory> TaskCategories;
+        public DbSet<TaskItem> Tasks { get; set; }
+        public DbSet<TaskCategory> TaskCategories { get; set; }
+        public DbSet<TaskItemXTaskCategory> TaskCategoryJoins { get; set; }
 
         public TasksContext(DbContextOptions<TasksContext> options) : base(options)
         {

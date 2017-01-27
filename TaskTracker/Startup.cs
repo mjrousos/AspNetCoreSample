@@ -58,6 +58,24 @@ namespace TaskList
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            // Seed database
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            using (var dbContext = serviceScope.ServiceProvider.GetService<TasksContext>())
+            {
+                var databaseConfig = Configuration.GetSection("DatabaseConnection");
+
+                // Non-relational databases (like InMemory) cannot have migrations applied to them
+                if (databaseConfig["Provider"]?.ToLowerInvariant() == "inmemory")
+                {
+                    dbContext.Database.EnsureCreated();
+                }
+                else
+                {
+                    dbContext.Database.Migrate();
+                }
+                dbContext.Seed();
+            }
+
             // Developer exception page is useful for development but should not be used
             // in release mode. On the other hand, UseExceptionHandler is a good way
             // of capturing and handling any unhandled exceptions from controllers.
@@ -80,6 +98,9 @@ namespace TaskList
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute(
+                    name: "api",
+                    template: "api/{controller}/{id?}");
             });
         }
     }
