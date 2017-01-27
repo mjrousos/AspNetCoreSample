@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using TaskList.Models;
 
 namespace TaskList
 {
@@ -29,6 +31,23 @@ namespace TaskList
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Decide which database to use based on configuration
+            var databaseConfig = Configuration.GetSection("DatabaseConnection");
+            switch (databaseConfig["Provider"]?.ToLowerInvariant())
+            {
+                case "inmemory":
+                    services.AddDbContext<TasksContext>(options => options.UseInMemoryDatabase());
+                    break;
+                case "azuresql":
+                    var connectionStringBase = databaseConfig["AzureSqlConnection:ConnectionString"];
+                    var userId = databaseConfig["AzureSqlConnection:UserId"];
+                    var password = databaseConfig["AzureSqlConnection:Password"];
+                    var connectionString = $"{connectionStringBase};User ID={userId};Password={password}";
+                    services.AddDbContext<TasksContext>(options => options.UseSqlServer(connectionString));
+                    break;
+                default:
+                    throw new InvalidOperationException("No database provided for Entity Framework use. Make sure DatabaseConnection:Provider is set.");
+            }
             // Add framework services.
             services.AddMvc();
         }

@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace TaskList.Models
+{
+    public class TaskCategory
+    {
+        public TaskCategory()
+        {
+            Created = DateTime.UtcNow;
+            Tasks = new List<TaskItem>();
+        }
+
+        // By convention, a property called 'Id' will
+        // be used as the primary key if no key is specified
+        public Guid Id { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public DateTime Created { get; set; }
+
+        public virtual List<TaskItem> Tasks { get; set; }
+
+        // TODO : In the future, once we add users
+        //        we can store users with access to the task category
+    }
+}
