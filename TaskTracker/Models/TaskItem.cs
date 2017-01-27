@@ -25,7 +25,7 @@ namespace TaskList.Models
         public virtual List<TaskItemXTaskCategory> CategoryJoins { get; set; }
 
         // Many-to-many helper property (not mapped)
-        public IEnumerable<TaskCategory> Categories => CategoryJoins.Select(j => j.Category);
+        public IEnumerable<TaskCategory> Categories => CategoryJoins.Select(j => j.Category).Distinct();
 
         // TODO : In the future, once we add users
         //        we can store users with access to the task
