@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using TaskList.Models;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace TaskList
 {
@@ -50,6 +51,12 @@ namespace TaskList
             }
             // Add framework services.
             services.AddMvc();
+
+            // Add swagger services
+            services.AddSwaggerGen(o =>
+            {
+                o.SwaggerDoc("v1", new Info { Title = "Task APIs", Version = "v1", Description = "API for Task Tracker" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -98,6 +105,15 @@ namespace TaskList
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
+            app.UseSwaggerUi(o =>
+            {
+                o.SwaggerEndpoint("/swagger/v1/swagger.json", "Task APIs v1");
             });
         }
     }

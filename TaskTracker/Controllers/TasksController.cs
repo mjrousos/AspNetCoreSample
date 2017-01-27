@@ -33,7 +33,7 @@ namespace TaskList.Controllers
         // but requires routes to be attributed individually
         // GET: api/Tasks
         [HttpGet]
-        public async Task<IActionResult> Tasks(int? skip, int? count, CancellationToken ct)
+        public async Task<IActionResult> Tasks([FromQuery] int? skip, [FromQuery] int? count, CancellationToken ct)
         {
             // Note that we need explicitly load related entities.
             // EF.Core does not support lazy loading like EF6 did.
@@ -85,7 +85,7 @@ namespace TaskList.Controllers
         // If a post is expected to only come from our views, an anti-forgery token should be used.
         // [ValidateAntiForgeryToken]
         // POST: api/Tasks
-        public async Task<IActionResult> Create(string title, string description, IEnumerable<Guid> categories, CancellationToken ct)
+        public async Task<IActionResult> Create([FromQuery] string title, [FromQuery] string description, [FromQuery] IEnumerable<Guid> categories, CancellationToken ct)
         {
             if (title == null)
             {
