@@ -8,7 +8,7 @@ using TaskList.Models;
 namespace TaskTracker.Migrations
 {
     [DbContext(typeof(TasksContext))]
-    [Migration("20170127034841_InitialMigration")]
+    [Migration("20170127201526_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,7 +32,7 @@ namespace TaskTracker.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TaskCategory");
+                    b.ToTable("TaskCategories");
                 });
 
             modelBuilder.Entity("TaskList.Models.TaskItem", b =>
@@ -54,7 +54,7 @@ namespace TaskTracker.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TaskItem");
+                    b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("TaskList.Models.TaskItemXTaskCategory", b =>
@@ -67,7 +67,7 @@ namespace TaskTracker.Migrations
 
                     b.HasIndex("TaskCategoryId");
 
-                    b.ToTable("TaskItemXTaskCategory");
+                    b.ToTable("TaskCategoryJoins");
                 });
 
             modelBuilder.Entity("TaskList.Models.TaskItemXTaskCategory", b =>

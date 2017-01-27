@@ -31,7 +31,7 @@ namespace TaskTracker.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TaskCategory");
+                    b.ToTable("TaskCategories");
                 });
 
             modelBuilder.Entity("TaskList.Models.TaskItem", b =>
@@ -53,7 +53,7 @@ namespace TaskTracker.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TaskItem");
+                    b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("TaskList.Models.TaskItemXTaskCategory", b =>
@@ -66,7 +66,7 @@ namespace TaskTracker.Migrations
 
                     b.HasIndex("TaskCategoryId");
 
-                    b.ToTable("TaskItemXTaskCategory");
+                    b.ToTable("TaskCategoryJoins");
                 });
 
             modelBuilder.Entity("TaskList.Models.TaskItemXTaskCategory", b =>

@@ -9,7 +9,7 @@ namespace TaskTracker.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "TaskCategory",
+                name: "TaskCategories",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -19,11 +19,11 @@ namespace TaskTracker.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TaskCategory", x => x.Id);
+                    table.PrimaryKey("PK_TaskCategories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TaskItem",
+                name: "Tasks",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -35,11 +35,11 @@ namespace TaskTracker.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TaskItem", x => x.Id);
+                    table.PrimaryKey("PK_Tasks", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TaskItemXTaskCategory",
+                name: "TaskCategoryJoins",
                 columns: table => new
                 {
                     TaskItemId = table.Column<Guid>(nullable: false),
@@ -47,37 +47,37 @@ namespace TaskTracker.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TaskItemXTaskCategory", x => new { x.TaskItemId, x.TaskCategoryId });
+                    table.PrimaryKey("PK_TaskCategoryJoins", x => new { x.TaskItemId, x.TaskCategoryId });
                     table.ForeignKey(
-                        name: "FK_TaskItemXTaskCategory_TaskCategory_TaskCategoryId",
+                        name: "FK_TaskCategoryJoins_TaskCategories_TaskCategoryId",
                         column: x => x.TaskCategoryId,
-                        principalTable: "TaskCategory",
+                        principalTable: "TaskCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TaskItemXTaskCategory_TaskItem_TaskItemId",
+                        name: "FK_TaskCategoryJoins_Tasks_TaskItemId",
                         column: x => x.TaskItemId,
-                        principalTable: "TaskItem",
+                        principalTable: "Tasks",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_TaskItemXTaskCategory_TaskCategoryId",
-                table: "TaskItemXTaskCategory",
+                name: "IX_TaskCategoryJoins_TaskCategoryId",
+                table: "TaskCategoryJoins",
                 column: "TaskCategoryId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "TaskItemXTaskCategory");
+                name: "TaskCategoryJoins");
 
             migrationBuilder.DropTable(
-                name: "TaskCategory");
+                name: "TaskCategories");
 
             migrationBuilder.DropTable(
-                name: "TaskItem");
+                name: "Tasks");
         }
     }
 }
