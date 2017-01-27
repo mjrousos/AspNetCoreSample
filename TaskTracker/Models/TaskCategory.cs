@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TaskList.Models
 {
@@ -8,7 +9,7 @@ namespace TaskList.Models
         public TaskCategory()
         {
             Created = DateTime.UtcNow;
-            Tasks = new List<TaskItem>();
+            TaskJoins = new List<TaskItemXTaskCategory>();
         }
 
         // By convention, a property called 'Id' will
@@ -18,7 +19,11 @@ namespace TaskList.Models
         public string Description { get; set; }
         public DateTime Created { get; set; }
 
-        public virtual List<TaskItem> Tasks { get; set; }
+        // Many-to-many relationships require an explicit join table
+        public virtual List<TaskItemXTaskCategory> TaskJoins { get; set; }
+
+        // Many-to-many helper property (not mapped)
+        public IEnumerable<TaskItem> Tasks => TaskJoins.Select(j => j.Task);
 
         // TODO : In the future, once we add users
         //        we can store users with access to the task category
