@@ -8,9 +8,10 @@ using TaskList.Models;
 namespace TaskTracker.Migrations
 {
     [DbContext(typeof(TasksContext))]
-    partial class TasksContextModelSnapshot : ModelSnapshot
+    [Migration("20170127202407_RemoveUnnecessaryCompletedProperty")]
+    partial class RemoveUnnecessaryCompletedProperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")

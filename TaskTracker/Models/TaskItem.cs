@@ -17,7 +17,6 @@ namespace TaskList.Models
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public bool Complete { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Completed { get; set; }
 
@@ -26,6 +25,8 @@ namespace TaskList.Models
 
         // Many-to-many helper property (not mapped)
         public IEnumerable<TaskCategory> Categories => CategoryJoins.Select(j => j.Category).Distinct();
+
+        public bool Complete => Completed.HasValue;
 
         // TODO : In the future, once we add users
         //        we can store users with access to the task
