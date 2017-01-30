@@ -48,6 +48,7 @@ namespace TaskList
                     services.AddDbContext<TasksContext>(options => options.UseInMemoryDatabase());
                     break;
                 case "azuresql":
+                    // Construct Azure SQL connection string based on configuration values
                     var connectionStringBase = databaseConfig["AzureSqlConnection:ConnectionString"];
                     var userId = databaseConfig["AzureSqlConnection:UserId"];
                     var password = databaseConfig["AzureSqlConnection:Password"];
@@ -77,6 +78,8 @@ namespace TaskList
 
             // Start Serilog - a popular third-party structured logging framework
             // Many Serilog sinks are available. https://github.com/serilog
+            // If AddSerilog is called without a log specified, the default
+            // log (created in ConfigureServices) will be used.
             loggerFactory.AddSerilog();
             // Make sure that any bufferred messages are sent at shutdown
             appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
@@ -117,6 +120,9 @@ namespace TaskList
                     log.LogDebug("Ensuring database migrated");
                     dbContext.Database.Migrate();
                 }
+
+                // A helper extension method we've created to add initial default values
+                // to the database, if needed.
                 dbContext.Seed();
             }
 

@@ -23,8 +23,11 @@
         // To override nested config values, just
         // specify them as environment variables with : delimiting
         // the levels of the config nesting
-        // "DatabaseConnection:Provider": "AzureSql",
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+
+        //"DatabaseConnection:Provider": "AzureSql",
+        //"DatabaseConnection:AzureSqlConnection:UserId": "",
+        //"DatabaseConnection:AzureSqlConnection:Password": ""
       }
     }
   }
