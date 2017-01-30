@@ -30,7 +30,8 @@
 
     "Serilog.Extensions.Logging": "1.4.0-dev-10138",
     "Serilog.Settings.Configuration": "2.3.0-dev-00042",
-    "Serilog.Sinks.Literate": "2.1.0-dev-00034"
+    "Serilog.Sinks.Literate": "2.1.0-dev-00034",
+    "Serilog.Sinks.ElasticSearch": "4.1.1"
   },
 
   "tools": {
