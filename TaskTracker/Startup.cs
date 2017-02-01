@@ -36,9 +36,20 @@ namespace TaskList
             // Configure Serilog sinks based on configuration, as explained in
             // https://github.com/serilog/serilog-sinks-literate#json-appsettingsjson-configuration
             // https://github.com/serilog/serilog-settings-configuration
-            Log.Logger = new LoggerConfiguration()
+            var logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(Configuration)
                 .CreateLogger();
+
+            // Two ways of registering the logger:
+            // 1) Serilog's default model is a shared global object (Log.Logger)
+            Log.Logger = logger;
+
+            // 2)
+            // Register the Serilog logger via dependency injection
+            // (although this is not strictly needed in this case since
+            // Serilog provides a global object access pattern via Log.Logger)
+            // This better matches ASP.NET Core design patterns
+            services.AddSingleton<Serilog.ILogger>(logger);
 
             // Decide which database to use based on configuration
             var databaseConfig = Configuration.GetSection("DatabaseConnection");
@@ -69,7 +80,7 @@ namespace TaskList
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime, ILogger<Startup> logger)
         {
             if (env.IsDevelopment())
             {
@@ -80,10 +91,10 @@ namespace TaskList
             // Many Serilog sinks are available. https://github.com/serilog
             // If AddSerilog is called without a log specified, the default
             // log (created in ConfigureServices) will be used.
-            loggerFactory.AddSerilog();
+            // loggerFactory.AddSerilog(); // <- This also works if Log.Logger has been set
+            loggerFactory.AddSerilog(app.ApplicationServices.GetRequiredService<Serilog.ILogger>());
             // Make sure that any bufferred messages are sent at shutdown
             appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
-            var log = loggerFactory.CreateLogger<Startup>();
 
             // Very simple custom middleware to log unhandled exceptions
             // More complex middleware would, of course, be enacpsulated in its own class
@@ -98,7 +109,7 @@ namespace TaskList
                 {
                     // Context.Response could be modifier here, if desired (set status code, for example)
                     // TODO - EventId's should be created unique to different event types the application may log
-                    log.LogError(new EventId(1), exc, "Unhandled exception caught");
+                    logger.LogError(new EventId(1), exc, "Unhandled exception caught");
                     throw;
                 }
             });
@@ -112,12 +123,12 @@ namespace TaskList
                 // Non-relational databases (like InMemory) cannot have migrations applied to them
                 if (databaseConfig["Provider"]?.ToLowerInvariant() == "inmemory")
                 {
-                    log.LogDebug("Ensuring database created");
+                    logger.LogDebug("Ensuring database created");
                     dbContext.Database.EnsureCreated();
                 }
                 else
                 {
-                    log.LogDebug("Ensuring database migrated");
+                    logger.LogDebug("Ensuring database migrated");
                     dbContext.Database.Migrate();
                 }
 
