@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using TaskList.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Serilog;
+using AutoMapper;
 
 namespace TaskList
 {
@@ -50,6 +51,16 @@ namespace TaskList
             // Serilog provides a global object access pattern via Log.Logger)
             // This better matches ASP.NET Core design patterns
             services.AddSingleton<Serilog.ILogger>(logger);
+
+            // Configure automapper
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.CreateMap<TaskCategory, TaskItemDTO.TaskItemDTOCategory>().ConvertUsing(category =>
+                {
+                    return new TaskItemDTO.TaskItemDTOCategory { Id = category.Id, Title = category.Title };
+                });
+                cfg.CreateMap<TaskItem, TaskItemDTO>();
+            });
 
             // Decide which database to use based on configuration
             var databaseConfig = Configuration.GetSection("DatabaseConnection");

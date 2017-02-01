@@ -31,7 +31,10 @@
     "Serilog.Extensions.Logging": "1.4.0-dev-10138",
     "Serilog.Settings.Configuration": "2.3.0-dev-00042",
     "Serilog.Sinks.Literate": "2.1.0-dev-00034",
-    "Serilog.Sinks.ElasticSearch": "4.1.1"
+    "Serilog.Sinks.ElasticSearch": "4.1.1",
+
+    "AutoMapper": "5.2.0",
+    "AutoMapper.Extensions.Microsoft.DependencyInjection": "1.2.0"
   },
 
   "tools": {
@@ -44,8 +47,6 @@
   "frameworks": {
     "netcoreapp1.1": {
       "imports": [
-        "dotnet5.6",
-        "portable-net45+win8"
       ]
     }
   },
