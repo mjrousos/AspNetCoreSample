@@ -1,0 +1,12 @@
+version: '2'
+
+services:
+  tasktracker:
+    image: mjrousos/tasktracker${TAG}
+    build:
+      # build needs context (path) and DockerFile
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      # Ports exposed (- "5000") or exposed and mapped (- "5000:5000")
+      - "5000:5000"

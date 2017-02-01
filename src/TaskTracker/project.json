@@ -54,7 +54,8 @@
 
   "buildOptions": {
     "emitEntryPoint": true,
-    "preserveCompilationContext": true
+    "preserveCompilationContext": true,
+    "debugType": "portable"
   },
 
   "runtimeOptions": {
@@ -68,7 +69,10 @@
       "wwwroot",
       "**/*.cshtml",
       "appsettings.json",
-      "web.config"
+      "web.config",
+      "docker-compose.yml",
+      "Dockerfile",
+      ".dockerignore"
     ]
   },
 

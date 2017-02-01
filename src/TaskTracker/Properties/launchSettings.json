@@ -29,6 +29,10 @@
         //"DatabaseConnection:AzureSqlConnection:UserId": "",
         //"DatabaseConnection:AzureSqlConnection:Password": ""
       }
+    },
+    "Docker": {
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:{ServicePort}"
     }
   }
 }
