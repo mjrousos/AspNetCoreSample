@@ -27,8 +27,9 @@ namespace TaskList
                 //
                 // This call MUST come before UseIISIntegration (if IIS integration is used)
                 // 
-                // URLs can also be picked up from a config file, if needed 
+                // URLs can also be picked up from a config file or environment variable, if needed 
                 // http://stackoverflow.com/questions/34212765/
+                // ENV ASPNETCORE_URLS=http://+:5000
                 .UseUrls("http://+:5000", "http://+:5001")
                 
                 .UseContentRoot(Directory.GetCurrentDirectory())
