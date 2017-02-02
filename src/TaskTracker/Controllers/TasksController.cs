@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using TaskList.Filters;
 using TaskList.Models;
 
 namespace TaskList.Controllers
@@ -21,6 +22,9 @@ namespace TaskList.Controllers
     // but it is common practice to use attribute-based routing (which is more verbose
     // but offers finer control) for REST/API routing.
     [Route("api/[controller]")]
+    //[PerformanceTrace] // This syntax can't be used with our particular filter because it requires
+                         // constructor arguments passed by DI.
+    [ServiceFilter(typeof(PerformanceTraceAttribute))]
     public class TasksController: Controller
     {
         private readonly TasksContext DbContext;

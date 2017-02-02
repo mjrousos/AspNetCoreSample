@@ -12,6 +12,7 @@ using TaskList.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Serilog;
 using AutoMapper;
+using TaskList.Filters;
 
 namespace TaskList
 {
@@ -80,6 +81,10 @@ namespace TaskList
                 default:
                     throw new InvalidOperationException("No database provided for Entity Framework use. Make sure DatabaseConnection:Provider is set.");
             }
+
+            // Register our performance filter since we will load it via DI
+            services.AddSingleton<PerformanceTraceAttribute>();
+
             // Add framework services.
             services.AddMvc();
 
