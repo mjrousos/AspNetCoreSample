@@ -96,6 +96,9 @@ namespace TaskList
             if (env.IsDevelopment())
             {
                 loggerFactory.AddDebug();
+
+                // Enable Serilog error logging (only for debug scenarios)
+                Serilog.Debugging.SelfLog.Enable(Console.Error);
             }
 
             // Start Serilog - a popular third-party structured logging framework
