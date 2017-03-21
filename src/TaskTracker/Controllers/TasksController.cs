@@ -60,7 +60,7 @@ namespace TaskList.Controllers
             if (count.HasValue) tasks = tasks.Take(count.Value);
 
             var ret = (await tasks.ToArrayAsync(ct)).Select(Mapper.Map<TaskItemDTO>).ToArray();
-            Logger.LogInformation("{Count} tasks queried", ret.Length);
+            Logger.LogInformation("{taskCount} tasks queried", ret.Length);
 
             return Json(ret);
         }
@@ -84,13 +84,13 @@ namespace TaskList.Controllers
                                         // AsNoTracking scenarios
                     .LoadAsync();
 
-                Logger.LogInformation("Task {ID} retrieved", id);
+                Logger.LogInformation("Task {taskID} retrieved", id);
 
                 return Json(Mapper.Map<TaskItemDTO>(task));
             }
             else
             {
-                Logger.LogWarning("Task {ID} not found", id);
+                Logger.LogWarning("Task {taskID} not found", id);
                 return NotFound();
             }
         }
@@ -124,10 +124,10 @@ namespace TaskList.Controllers
             }
             await DbContext.SaveChangesAsync(ct);
 
-            Logger.LogInformation("Created task {ID}", newTask.Id);
+            Logger.LogInformation("Created task {taskID}", newTask.Id);
             if (newTask.CategoryJoins.Any())
             {
-                Logger.LogInformation("Task {ID} added to {count} categories", newTask.Id, newTask.CategoryJoins.Count);
+                Logger.LogInformation("Task {taskID} added to {categoryCount} categories", newTask.Id, newTask.CategoryJoins.Count);
             }
             return Created(Url.RouteUrl("TaskDetails", new { id = newTask.Id }), Mapper.Map<TaskItemDTO>(newTask));
         }
