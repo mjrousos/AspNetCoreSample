@@ -8,11 +8,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Serilog.Sinks.AwsCloudWatch;
 using TaskList.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Serilog;
 using AutoMapper;
 using TaskList.Filters;
+using Serilog.Events;
+using Amazon.CloudWatchLogs;
+using Amazon;
+using Amazon.Runtime;
 
 namespace TaskList
 {
@@ -121,7 +126,7 @@ namespace TaskList
             app.Use(async (context, next)=>
             {
                 try
-                {
+                { 
                     await next();
                 }
                 catch(Exception exc)
