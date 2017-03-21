@@ -1,0 +1,8 @@
+version: '2'
+
+services:
+  tasktracker:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5000:5000"

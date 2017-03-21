@@ -18,7 +18,7 @@
     "TaskList": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:5000",
+      "launchUrl": "http://localhost:5000/swagger",
       "environmentVariables": {
         // To override nested config values, just
         // specify them as environment variables with : delimiting

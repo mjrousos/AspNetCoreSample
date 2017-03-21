@@ -1,4 +1,3 @@
-docker-compose.yml
-docker-compose.dev.debug.yml
-docker-compose.dev.release.yml
-Dockerfile
+*
+!obj/Docker/publish/*
+!obj/Docker/empty/

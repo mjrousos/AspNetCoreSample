@@ -1,0 +1,8 @@
+version: '2'
+
+services:
+  tasktracker:
+    image: tasktracker
+    build:
+      context: ./src/TaskTracker
+      dockerfile: Dockerfile
