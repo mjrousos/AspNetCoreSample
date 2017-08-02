@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Routing" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="1.1.1" />
@@ -28,6 +28,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="1.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="1.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="1.1.1" />
+    
+    <!-- This is an important reference because without it, culture-specific resource lookup won't work. 
+         Many localization APIs will appear to work but only return default resources. This package is 
+         needed to find culture-specific resources. -->
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Localization" Version="1.1.1" />
+    
     <PackageReference Include="Swashbuckle.AspNetCore" Version="1.0.0-rc1" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="1.4.0-dev-10138" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="2.3.0-dev-00042" />

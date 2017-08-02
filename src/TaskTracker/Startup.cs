@@ -10,6 +10,9 @@ using Swashbuckle.AspNetCore.Swagger;
 using Serilog;
 using AutoMapper;
 using TaskList.Filters;
+using Microsoft.AspNetCore.Mvc.Razor;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace TaskList
 {
@@ -50,6 +53,12 @@ namespace TaskList
             // This better matches ASP.NET Core design patterns
             services.AddSingleton<Serilog.ILogger>(logger);
 
+            // Add localization resources (like IStringLocalizer objects)
+            // The ResourcesPath indicates the relative path where resources 
+            // are located.
+            // Resources will be found at [ResourcePath]/[FullyQualifiedTypeName].[culture].resx
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+
             // Configure automapper
             services.AddAutoMapper(cfg =>
             {
@@ -83,7 +92,9 @@ namespace TaskList
             services.AddSingleton<PerformanceTraceAttribute>();
 
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc()
+                // This indicates where resources should be loaded from for Views
+                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
 
             // Add swagger services
             services.AddSwaggerGen(o =>
@@ -152,6 +163,31 @@ namespace TaskList
                 // to the database, if needed.
                 dbContext.Seed();
             }
+
+            // Cultures that our loc middleware should allow
+            // These correspond to cultures that we have meaningful resources for
+            //
+            // Note that neutral cultures (like fr or en) will allow unlisted specific
+            // cultures to fall back to them.
+            var supportedCultures = new[]
+{
+                new CultureInfo("en-US"),
+                new CultureInfo("en"),
+                new CultureInfo("fr-FR"),
+                new CultureInfo("fr"),
+            };
+
+            // Add middleware that will set CurrentCulture and CurrentUICulture according
+            // to culture of the request (as indicated by cookies, query string, or header)
+            // https://docs.microsoft.com/aspnet/core/fundamentals/localization#implement-a-strategy-to-select-the-languageculture-for-each-request
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("en-US"),
+                // Formatting numbers, dates, etc.
+                SupportedCultures = supportedCultures,
+                // UI strings that we have localized.
+                SupportedUICultures = supportedCultures
+            });
 
             // Developer exception page is useful for development but should not be used
             // in release mode. On the other hand, UseExceptionHandler is a good way

@@ -1,9 +1,13 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+
+@{
     ViewData["Title"] = "Dashboard";
 }
 
 <div class="container">
     <h1>
-        All Tasks
+        @Localizer["ALL_TASKS_TITLE"]
     </h1>
 </div>
