@@ -18,7 +18,7 @@ namespace TaskTracker.Controllers
         public TasksControllerTest()
         {
             var services = new ServiceCollection();
-            services.AddDbContext<TasksContext>(options => options.UseInMemoryDatabase());
+            services.AddDbContext<TasksContext>(options => options.UseInMemoryDatabase("TaskTrackerTestDB"));
 
             services.AddAutoMapper(cfg =>
             {

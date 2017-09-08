@@ -74,7 +74,7 @@ namespace TaskList
             switch (databaseConfig["Provider"]?.ToLowerInvariant())
             {
                 case "inmemory":
-                    services.AddDbContext<TasksContext>(options => options.UseInMemoryDatabase());
+                    services.AddDbContext<TasksContext>(options => options.UseInMemoryDatabase("TaskTrackerDB"));
                     break;
                 case "azuresql":
                     // Construct Azure SQL connection string based on configuration values
